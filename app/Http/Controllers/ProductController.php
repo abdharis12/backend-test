@@ -11,10 +11,23 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        return Product::all();
+        $query = Product::query();
+
+        if ($request->has('name')) {
+            $query->where('nama_barang', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->has('date')) {
+            $date = Carbon::createFromFormat('Y-m-d', $request->input('date'))->format('d/m/Y');
+            $query->where('tgl_transaksi', $date);
+        }
+
+        $products = $query->get();
+
+        return response()->json($products);
     }
 
     /**

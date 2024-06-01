@@ -16,8 +16,9 @@ class ProductController extends Controller
         //
         $query = Product::query();
 
-        if ($request->has('name')) {
-            $query->where('nama_barang', 'like', '%' . $request->input('name') . '%');
+        if ($request->has('search')) {
+            $query->where('nama_barang', 'like', '%' . $request->input('search') . '%')
+                ->orWhereDate('tgl_transaksi', $request->input('search'));
         }
 
         if ($request->has('date')) {

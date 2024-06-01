@@ -58,9 +58,21 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
         //
+        $validatedData = $request->validate([
+            'nama_barang' => 'required|string|max:255',
+            'stok' => 'required|integer',
+            'jumlah_terjual' => 'required|integer',
+            'tgl_transaksi' => 'required|date_format:d/m/Y',
+            'jenis_barang' => 'required|string|max:255',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->update($validatedData);
+
+        return response()->json($product);
     }
 
     /**
